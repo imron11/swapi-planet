@@ -1,27 +1,33 @@
-import { action, observable, makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { container } from "tsyringe";
 import PlanetRestService from "../../service/rest/planet-rest.service";
+import { PlanetResponse } from "../../entity/planet.entity";
+import RootStore from "../root.store";
 
 class PlanetStore {
+  root: RootStore;
   private _planetRestService = container.resolve(PlanetRestService);
 
-  constructor() {
+  constructor(root: RootStore) {
+    this.root = root;
     makeAutoObservable(this);
   }
 
-  @observable dataPlanets: any = [];
+  dataPlanets: PlanetResponse = null;
 
-  @action
-  getListPlanets = () => {
-    this.dataPlanets = [];
+  getListPlanets = async () => {
+    this.dataPlanets = null;
     this._planetRestService.getListPlanets().subscribe(
       (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
+        this.setDataPlanets(response)
       }
     );
+  }
+
+  setDataPlanets = (planets) => {
+    this.dataPlanets = planets;
+
+    console.log(this.dataPlanets);
   }
 }
 

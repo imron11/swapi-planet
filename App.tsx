@@ -1,5 +1,6 @@
 import React from "react";
 import { Router, Scene, Stack } from "react-native-router-flux";
+import { RootStoreProvider } from "./src/main/root.provider";
 
 import BootComponent from "./src/main/boot/boot.component";
 import SigninComponent from "./src/main/signin/signin.component";
@@ -13,7 +14,7 @@ XMLHttpRequest = (global as any).originalXMLHttpRequest
 
 const App = () => {
   return (
-    <>
+    <RootStoreProvider>
       <Router>
         <Stack
           key={'root'}
@@ -24,24 +25,24 @@ const App = () => {
             component={BootComponent}
             hideNavBar
           />
-          <Scene 
+          <Scene
             key={"SigninPage"}
             component={SigninComponent}
             hideNavBar
           />
-          <Scene 
+          <Scene
             key={"PlanetPage"}
             component={PlanetComponent}
             hideNavBar
           />
-          <Scene 
+          <Scene
             key={"WishlistPage"}
             component={WishlistComponent}
             hideNavBar
           />
         </Stack>
       </Router>
-    </>
+    </RootStoreProvider>
   )
 }
 

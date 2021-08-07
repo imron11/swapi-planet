@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  FlatList,
   StyleSheet,
 } from "react-native";
 import { scaledVertical } from "../../service/helper/scale.helper";
@@ -8,19 +9,37 @@ import PlanetList from "../../shared/component/list/planet.list";
 import Spacer from "../../shared/component/spacer/spacer";
 import PlanetHeaderSection from "./section/planet-header.section";
 import PlanetDetailSection from "./section/planet-detail.section";
+import { observer } from "mobx-react";
+import { usePlanetStore } from "../root.provider";
 
-const PlanetComponent = () => {
-
+const PlanetComponent = observer(() => {
   const [showDetail, setShowDetail] = useState(false);
+  const _planetStore = usePlanetStore();
+
+  useEffect(() => {
+    _planetStore.getListPlanets();
+  }, [_planetStore]);
+
+  const renderItem = ({ item }) => (
+    <PlanetList 
+    onPress={() => { setShowDetail(true) }} 
+    name={item.name} 
+    population={item.population} 
+    climate={item.climate} />
+  );
 
   return (
     <>
       <PageLayout style={styles.container}>
         <PlanetHeaderSection />
         <Spacer h={scaledVertical(32)} />
-        <PlanetList onPress={() => { setShowDetail(true) }} name={"TATOOINE"} population={200000} climate={"temperature"} />
-        <PlanetList onPress={() => { setShowDetail(true) }} name={"ALDERAAN"} population={200000} climate={"temperature"} />
-        <PlanetList onPress={() => { setShowDetail(true) }} name={"YAVINE IV"} population={200000} climate={"temperature"} />
+        {_planetStore.dataPlanets &&
+          <FlatList
+            data={_planetStore.dataPlanets.results}
+            keyExtractor={(item) => item.url}
+            renderItem={renderItem}
+          />
+        }
       </PageLayout>
 
       <PlanetDetailSection
@@ -29,7 +48,7 @@ const PlanetComponent = () => {
       />
     </>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
