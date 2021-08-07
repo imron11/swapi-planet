@@ -13,7 +13,7 @@ import Text from "../../shared/component/text/text";
 const SigninComponent = () => {
 
   const onGetStarted = () => {
-    Actions.reset("HomePage");
+    Actions.reset("PlanetPage");
   }
 
   return (
@@ -21,6 +21,7 @@ const SigninComponent = () => {
       <View style={styles.greetingContainer}>
         <Text
           variant={"subtitle"}
+          color={"darkGray"}
           value={"WELCOME\nTO"}
           style={styles.greetingText}
         />
@@ -33,6 +34,7 @@ const SigninComponent = () => {
         <Spacer h={scaledVertical(100)} />
         <Text
           variant={"caption"}
+          color={"darkGray"}
           value={`"swapi" (Swah-pee) is the world's first quantified and programmatically-accessible data source for all the data from the Star Wars canon universe! We've taken all the rich contextual stuff from the universe and formatted into something easier to consume with software. Then we went and stuck an API on the front so you can access it all!`}
           style={styles.descriptionText}
         />

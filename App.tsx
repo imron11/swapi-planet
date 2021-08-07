@@ -3,7 +3,8 @@ import { Router, Scene, Stack } from "react-native-router-flux";
 
 import BootComponent from "./src/main/boot/boot.component";
 import SigninComponent from "./src/main/signin/signin.component";
-import HomeComponent from "./src/main/home/home.component";
+import PlanetComponent from "./src/main/planet/planet.component";
+import WishlistComponent from "./src/main/wishlist/wishlist.component";
 
 // To Allow network debugger
 XMLHttpRequest = (global as any).originalXMLHttpRequest
@@ -29,8 +30,13 @@ const App = () => {
             hideNavBar
           />
           <Scene 
-            key={"HomePage"}
-            component={HomeComponent}
+            key={"PlanetPage"}
+            component={PlanetComponent}
+            hideNavBar
+          />
+          <Scene 
+            key={"WishlistPage"}
+            component={WishlistComponent}
             hideNavBar
           />
         </Stack>

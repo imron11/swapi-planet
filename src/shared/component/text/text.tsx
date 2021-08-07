@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontWeight: "normal",
-    fontSize: scaledFontSize(24),
+    fontSize: scaledFontSize(20),
   },
   captionBold: {
     fontWeight: "bold",
-    fontSize: scaledFontSize(24),
+    fontSize: scaledFontSize(20),
   },
 });
 
@@ -43,7 +43,8 @@ type Color =
   | "secondary"
   | "white"
   | "blue"
-  | "pink";
+  | "pink"
+  | "darkGray";
 
 interface Props extends TextProps {
   variant?: Variant;
@@ -88,6 +89,8 @@ const Text: React.FC<Props> = ({
         return colors.blue;
       case "pink":
         return colors.pink;
+      case "darkGray":
+        return colors.darkGray;
       default:
         return colors.secondary;
     }
