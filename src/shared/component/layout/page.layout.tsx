@@ -19,7 +19,7 @@ const PageLayout: React.FC<Props> = (props: Props) => {
       <SafeAreaView style={styles.safeAreaEdgeContainer} />
       <SafeAreaView style={styles.safeAreaMainContainer}>
         <StatusBar backgroundColor={colors.primary} barStyle={"dark-content"} />
-        <View {...props} style={styles.mainContainer}>
+        <View {...props} style={[styles.mainContainer, props.style]}>
           {props.children}
         </View>
       </SafeAreaView>
