@@ -11,7 +11,7 @@ class PlanetRestService extends BaseRestService {
     return new HttpClientService(APP_CONSTANT.BASE_URL);
   }
 
-  public getListPlanet(): Observable<any> {
+  public getListPlanets(): Observable<any> {
     return this.wrapError(this.http.get("planets"))
   }
 
