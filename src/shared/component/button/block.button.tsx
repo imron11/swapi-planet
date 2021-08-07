@@ -24,7 +24,7 @@ const BlockButton: React.FC<Props> = (props: Props) => {
       style={[
         styles.container,
         {
-          backgroundColor: props.backgroundColor ? props.backgroundColor : colors.secondary
+          backgroundColor: props.backgroundColor ? props.backgroundColor : colors.pink
         },
         props.style
       ]}
@@ -42,15 +42,15 @@ const BlockButton: React.FC<Props> = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: scaledVertical(10),
-    borderRadius: 10,
+    padding: scaledVertical(24),
+    borderRadius: 30,
     alignItems: "center",
     alignSelf: "stretch",
     justifyContent: "space-between"
   },
   buttonText: {
-    fontWeight: "bold",
-    fontSize: scaledFontSize(16),
+    fontWeight: "700",
+    fontSize: scaledFontSize(28),
     color: colors.white
   }
 });
