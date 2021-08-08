@@ -1,4 +1,4 @@
-type Planet = {
+export type Planet = {
   name: string;
   rotation_period: string;
   orbital_period: string;

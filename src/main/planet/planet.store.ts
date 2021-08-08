@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { container } from "tsyringe";
 import PlanetRestService from "../../service/rest/planet-rest.service";
-import { PlanetResponse } from "../../entity/planet.entity";
+import { Planet, PlanetResponse } from "../../entity/planet.entity";
 import RootStore from "../root.store";
 
 class PlanetStore {
@@ -14,6 +14,7 @@ class PlanetStore {
   }
 
   dataPlanets: PlanetResponse = null;
+  dataDetailPlanet: Planet = null;
 
   getListPlanets = async () => {
     this.dataPlanets = null;
@@ -26,8 +27,18 @@ class PlanetStore {
 
   setDataPlanets = (planets) => {
     this.dataPlanets = planets;
+  }
 
-    console.log(this.dataPlanets);
+  getDetailPlanet = async (url) => {
+    this._planetRestService.getDetailPlanet(url).subscribe(
+      (response) => {
+        this.setDetailPlanet(response);
+      }
+    )
+  }
+
+  setDetailPlanet = (planet) => {
+    this.dataDetailPlanet = planet;
   }
 }
 

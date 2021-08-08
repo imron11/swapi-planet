@@ -20,12 +20,17 @@ const PlanetComponent = observer(() => {
     _planetStore.getListPlanets();
   }, [_planetStore]);
 
+  const onGetDetailPlanet = (url) => {
+    _planetStore.getDetailPlanet(url);
+    setShowDetail(true)
+  }
+
   const renderItem = ({ item }) => (
-    <PlanetList 
-    onPress={() => { setShowDetail(true) }} 
-    name={item.name} 
-    population={item.population} 
-    climate={item.climate} />
+    <PlanetList
+      onPress={() => { onGetDetailPlanet(item.url) }}
+      name={item.name}
+      population={item.population}
+      climate={item.climate} />
   );
 
   return (
@@ -43,6 +48,7 @@ const PlanetComponent = observer(() => {
       </PageLayout>
 
       <PlanetDetailSection
+        data={_planetStore.dataDetailPlanet}
         visible={showDetail}
         onClose={() => { setShowDetail(false) }}
       />

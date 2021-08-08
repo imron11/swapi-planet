@@ -14,8 +14,11 @@ import Spacer from "../../../shared/component/spacer/spacer";
 import RowList from "../../../shared/component/list/row.list";
 import icons from "../../../asset/icons";
 import colors from "../../../shared/theme/colors";
+import { Planet } from "../../../entity/planet.entity";
+import { formatDate } from "../../../service/helper/date.helper";
 
 interface Props extends ModalProps {
+  data: Planet;
   onClose: () => void;
   isSaved?: boolean;
 }
@@ -26,10 +29,6 @@ const PlanetDetailSection: React.FC<Props> = (props: Props) => {
     props.onClose();
   }
 
-  const onPressBtn = () => {
-    
-  }
-
   return (
     <>
       <ModalLayout
@@ -37,63 +36,69 @@ const PlanetDetailSection: React.FC<Props> = (props: Props) => {
         onRequestClose={onCloseModal}
         backdropPress={() => onCloseModal()}
       >
-        <View style={styles.container}>
-          <TouchableOpacity 
-          style={styles.btnIconContainer}>
-            <Image
-              source={props.isSaved ? icons.icon_trash : icons.icon_heart}
-              resizeMode={"stretch"}
-              style={styles.icon}
+        {props.data &&
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.btnIconContainer}>
+              <Image
+                source={props.isSaved ? icons.icon_trash : icons.icon_heart}
+                resizeMode={"stretch"}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+            <Logo width={scaledVertical(350)} height={scaledVertical(350)} />
+            <Text
+              variant={"subtitle"}
+              color={"blue"}
+              value={props.data.name}
+              style={styles.titleText}
             />
-          </TouchableOpacity>
-          <Logo width={scaledVertical(350)} height={scaledVertical(350)} />
-          <Text
-            variant={"subtitle"}
-            color={"blue"}
-            value={"tatooine"}
-            style={styles.titleText}
-          />
-          <Spacer h={scaledVertical(50)} />
-          <RowList
-            label={"Rotation Period"}
-            value={"23"}
-          />
-          <RowList
-            label={"Orbital Period"}
-            value={"23"}
-          />
-          <RowList
-            label={"Diameter"}
-            value={"23"}
-          />
-          <RowList
-            label={"Climate"}
-            value={"23"}
-          />
-          <RowList
-            label={"Gravity"}
-            value={"23"}
-          />
-          <RowList
-            label={"Surface Water"}
-            value={"23"}
-          />
-          <RowList
-            label={"Population"}
-            value={"23"}
-          />
-          <Spacer h={scaledVertical(50)} />
-          <Text
-            variant={"caption-bold"}
-            value={"Created at"}
-          />
-          <Text
-            variant={"body-bold"}
-            color={"pink"}
-            value={"20 January 2021"}
-          />
-          <Spacer h={scaledVertical(20)} />
-        </View>
+            <Spacer h={scaledVertical(50)} />
+            <RowList
+              label={"Rotation Period"}
+              value={props.data.rotation_period}
+            />
+            <RowList
+              label={"Orbital Period"}
+              value={props.data.orbital_period}
+            />
+            <RowList
+              label={"Diameter"}
+              value={props.data.diameter}
+            />
+            <RowList
+              label={"Climate"}
+              value={props.data.climate}
+            />
+            <RowList
+              label={"Gravity"}
+              value={props.data.gravity}
+            />
+            <RowList
+              label={"Terrain"}
+              value={props.data.terrain}
+            />
+            <RowList
+              label={"Surface Water"}
+              value={props.data.surface_water}
+            />
+            <RowList
+              label={"Population"}
+              value={props.data.population}
+            />
+            <Spacer h={scaledVertical(50)} />
+            <Text
+              variant={"caption-bold"}
+              value={"Created at"}
+            />
+            <Text
+              variant={"body-bold"}
+              color={"pink"}
+              value={`${formatDate(props.data.created)}`}
+            />
+            <Spacer h={scaledVertical(20)} />
+          </View>
+        }
       </ModalLayout>
     </>
   );
