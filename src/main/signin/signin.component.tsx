@@ -9,10 +9,12 @@ import BlockButton from "../../shared/component/button/block.button";
 import PageLayout from "../../shared/component/layout/page.layout";
 import Spacer from "../../shared/component/spacer/spacer";
 import Text from "../../shared/component/text/text";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SigninComponent = () => {
 
-  const onGetStarted = () => {
+  const onGetStarted = async () => {
+    await AsyncStorage.setItem('@user', 'public');
     Actions.reset("PlanetPage");
   }
 
