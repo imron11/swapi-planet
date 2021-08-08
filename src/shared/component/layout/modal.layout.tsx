@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalProps,
   StyleSheet,
   View
 } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { scaledHorizontal, scaledVertical } from "../../../service/helper/scale.helper";
+import { scaledVertical } from "../../../service/helper/scale.helper";
 import colors from "../../theme/colors";
 
 interface Props extends ModalProps {
@@ -15,21 +14,36 @@ interface Props extends ModalProps {
 }
 
 const ModalLayout: React.FC<Props> = (props: Props) => {
+  const [isShow, setIsShow] = useState(false);
+
+  const onShowModal = () => {
+    setTimeout(() => {
+      setIsShow(true);
+    }, 500);
+  }
+
   return (
     <Modal
       {...props}
       animationType={"fade"}
+      onShow={onShowModal}
+      onRequestClose={() => {
+        props.onRequestClose();
+        setIsShow(false);
+      }}
       transparent
       statusBarTranslucent
     >
       {props.visible &&
         <>
           <View style={styles.backdropContainer} onTouchStart={() => { props.backdropPress?.() }} />
-          <View style={styles.container}>
-            <View style={styles.cardContainer}>
-              {props.children}
+          {isShow &&
+            <View style={styles.container}>
+              <View style={styles.cardContainer}>
+                {props.children}
+              </View>
             </View>
-          </View>
+          }
         </>
       }
     </Modal>

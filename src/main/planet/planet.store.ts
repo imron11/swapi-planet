@@ -1,7 +1,7 @@
 import { makeAutoObservable, toJS } from "mobx";
 import { container } from "tsyringe";
 import PlanetRestService from "../../service/rest/planet-rest.service";
-import { Planet, PlanetResponse } from "../../entity/planet.entity";
+import { Planet } from "../../entity/planet.entity";
 import RootStore from "../root.store";
 
 class PlanetStore {
@@ -42,8 +42,8 @@ class PlanetStore {
 
   getMorePlanets = () => {
     this.pageNumber += 1;
-    this.isLoadData = true;
     if (this.pageNumber <= 6) {
+      this.isLoadData = true;
       this._planetRestService.getListPlanets(this.pageNumber)
       .finally(() => {
         this.isLoadData = false;
