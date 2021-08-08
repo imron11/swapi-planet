@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   ModalProps,
@@ -24,8 +24,16 @@ interface Props extends ModalProps {
 }
 
 const PlanetDetailSection: React.FC<Props> = (props: Props) => {
+  const [isShow, setIsShow] = useState(false);
+
+  const onShowModal = () => {
+    setTimeout(() => {
+      setIsShow(true);
+  }, 500);
+  }
 
   const onCloseModal = () => {
+    setIsShow(false)
     props.onClose();
   }
 
@@ -33,6 +41,7 @@ const PlanetDetailSection: React.FC<Props> = (props: Props) => {
     <>
       <ModalLayout
         {...props}
+        onShow={onShowModal}
         onRequestClose={onCloseModal}
         backdropPress={() => onCloseModal()}
       >

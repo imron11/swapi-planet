@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
+  RefreshControl,
   StyleSheet,
 } from "react-native";
 import { scaledVertical } from "../../service/helper/scale.helper";
 import PageLayout from "../../shared/component/layout/page.layout";
 import PlanetList from "../../shared/component/list/planet.list";
 import Spacer from "../../shared/component/spacer/spacer";
+import Text from "../../shared/component/text/text";
 import PlanetHeaderSection from "./section/planet-header.section";
 import PlanetDetailSection from "./section/planet-detail.section";
 import { observer } from "mobx-react";
@@ -18,19 +20,42 @@ const PlanetComponent = observer(() => {
 
   useEffect(() => {
     _planetStore.getListPlanets();
+
+    return () => {
+      _planetStore.resetPlanets();
+    }
   }, [_planetStore]);
+
+  const onRefresh = () => {
+    _planetStore.resetPlanets();
+    _planetStore.getListPlanets();
+  }
 
   const onGetDetailPlanet = (url) => {
     _planetStore.getDetailPlanet(url);
     setShowDetail(true)
   }
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <PlanetList
+      key={index}
       onPress={() => { onGetDetailPlanet(item.url) }}
       name={item.name}
       population={item.population}
       climate={item.climate} />
+  );
+
+  const renderFooter = () => (
+    <>
+      {_planetStore.pageNumber > 6 &&
+        <Text
+          variant={"caption-bold"}
+          color={"darkGray"}
+          value={"All Data Planet Loaded."}
+          style={styles.footerText}
+        />
+      }
+    </>
   );
 
   return (
@@ -40,9 +65,20 @@ const PlanetComponent = observer(() => {
         <Spacer h={scaledVertical(32)} />
         {_planetStore.dataPlanets &&
           <FlatList
-            data={_planetStore.dataPlanets.results}
+            data={_planetStore.dataPlanets}
             keyExtractor={(item) => item.url}
             renderItem={renderItem}
+            ListFooterComponent={renderFooter}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              _planetStore.getMorePlanets();
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={_planetStore.isLoadData}
+                onRefresh={onRefresh}
+              />
+            }
           />
         }
       </PageLayout>
@@ -59,6 +95,11 @@ const PlanetComponent = observer(() => {
 const styles = StyleSheet.create({
   container: {
     padding: scaledVertical(30)
+  },
+  footerText: {
+    textAlign: "center",
+    marginVertical: scaledVertical(20),
+    fontStyle: "italic"
   }
 });
 

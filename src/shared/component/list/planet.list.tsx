@@ -12,7 +12,7 @@ import Text from "../text/text";
 interface Props {
   onPress?: () => void;
   name: string;
-  population: number;
+  population: string;
   climate: string;
 }
 

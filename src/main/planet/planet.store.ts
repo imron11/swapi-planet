@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 import { container } from "tsyringe";
 import PlanetRestService from "../../service/rest/planet-rest.service";
 import { Planet, PlanetResponse } from "../../entity/planet.entity";
@@ -13,20 +13,50 @@ class PlanetStore {
     makeAutoObservable(this);
   }
 
-  dataPlanets: PlanetResponse = null;
+  dataPlanets: Planet[] = null;
   dataDetailPlanet: Planet = null;
 
-  getListPlanets = async () => {
+  //for infinite scroll
+  isLoadData: boolean = false;
+  pageNumber: number = 1;
+
+  resetPlanets = () => {
     this.dataPlanets = null;
-    this._planetRestService.getListPlanets().subscribe(
+    this.dataDetailPlanet = null;
+    this.pageNumber = 1;
+  }
+
+  getListPlanets = () => {
+    this.dataPlanets = null;
+    this.isLoadData = true;
+    this._planetRestService.getListPlanets(this.pageNumber)
+    .finally(() => {
+      this.isLoadData = false;
+    })
+    .subscribe(
       (response) => {
-        this.setDataPlanets(response)
+        this.setDataPlanets(response.results)
       }
     );
   }
 
-  setDataPlanets = (planets) => {
-    this.dataPlanets = planets;
+  getMorePlanets = () => {
+    this.pageNumber += 1;
+    this.isLoadData = true;
+    if (this.pageNumber <= 6) {
+      this._planetRestService.getListPlanets(this.pageNumber)
+      .finally(() => {
+        this.isLoadData = false;
+      })
+      .subscribe(
+        (response) => {
+          const currentPlanets = toJS(this.dataPlanets);
+          const allPlanets = currentPlanets.concat(response.results);
+
+          this.setDataPlanets(allPlanets);
+        }
+      );
+    }
   }
 
   getDetailPlanet = async (url) => {
@@ -35,6 +65,10 @@ class PlanetStore {
         this.setDetailPlanet(response);
       }
     )
+  }
+
+  setDataPlanets = (planets) => {
+    this.dataPlanets = planets;
   }
 
   setDetailPlanet = (planet) => {

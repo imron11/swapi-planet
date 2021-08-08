@@ -16,8 +16,8 @@ class PlanetRestService extends BaseRestService {
     return new HttpClientService("");
   } 
 
-  public getListPlanets(): Observable<PlanetResponse> {
-    return this.wrapError(this.httpBase.get("planets"));
+  public getListPlanets(page): Observable<PlanetResponse> {
+    return this.wrapError(this.httpBase.get(`planets/?page=${page}`));
   }
 
   public getDetailPlanet(url): Observable<Planet> {
