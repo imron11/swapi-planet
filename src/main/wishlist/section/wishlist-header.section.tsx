@@ -28,6 +28,12 @@ const WishlistHeaderSection = () => {
           value={"Wishlist of Planet(s)"}
           style={styles.titleText}
         />
+        <Text
+          variant={"caption"}
+          color={"darkGray"}
+          value={"Click icon planet or name of planet to see the detail of planet."}
+          style={styles.noteText}
+        />
       </View>
     </View>
   );
