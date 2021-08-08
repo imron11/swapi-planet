@@ -2,15 +2,14 @@ import React from "react";
 import {
   View,
   ViewProps,
-  Text,
   StyleSheet
 } from "react-native";
 import {
-  scaledFontSize,
   scaledHorizontal,
   scaledVertical
 } from "../../../service/helper/scale.helper";
 import colors from "../../theme/colors";
+import Text from "../text/text";
 
 interface Props extends ViewProps {
   title?: string;
@@ -21,18 +20,21 @@ const NotFoundSection: React.FC<Props> = (props: Props) => {
   return (
     <View {...props} style={styles.container}>
       <Text
-        style={
-          styles.title
-        }>
-        {props.title}
-      </Text>
+        variant={"body-bold"}
+        color={"darkGray"}
+        value={props.title ? props.title : "Oooopss....\ndata not found"}
+        style={{ textAlign: "center" }}
+      />
 
       <Text
-        style={
-          styles.description
-        }>
-        {props.description}
-      </Text>
+        variant={"caption"}
+        value={props.title ? props.title : "SOMETHING WRONG, we cannot find some data that saved in your database, please add some data and try again. Thanks"}
+        style={{ 
+          marginTop: scaledVertical(30), 
+          textAlign: "center", 
+          fontStyle: "italic" 
+        }}
+      />
     </View>
   );
 }
@@ -41,9 +43,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: colors.primary,
     alignItems: "center",
-    paddingTop: scaledVertical(75)
+    paddingTop: scaledVertical(120),
+    paddingHorizontal: scaledHorizontal(75)
   },
   image: {
     width: scaledHorizontal(300),
@@ -51,19 +53,6 @@ const styles = StyleSheet.create({
     tintColor: colors.secondary,
     marginBottom: scaledVertical(16)
   },
-  title: {
-    fontSize: scaledFontSize(32),
-    fontWeight: "700",
-    color: colors.secondary,
-    textAlign: "center",
-    marginBottom: scaledVertical(8),
-  },
-  description: {
-    fontSize: scaledFontSize(24),
-    color: colors.secondary,
-    fontStyle: "italic",
-    textAlign: "center"
-  }
 })
 
 export default NotFoundSection;

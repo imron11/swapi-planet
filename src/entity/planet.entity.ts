@@ -17,3 +17,9 @@ export type PlanetResponse = {
   results: Planet[]
 }
 
+export interface SavedPlanet {
+  url: string;
+  name: string;
+  population: string;
+  climate: string;
+}

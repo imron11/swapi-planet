@@ -11,7 +11,11 @@ import { scaledHorizontal, scaledVertical } from "../../../service/helper/scale.
 import colors from "../../../shared/theme/colors";
 import { Actions } from "react-native-router-flux";
 
-const PlanetHeaderSection = () => {
+interface Props {
+  notifCount?: number
+}
+
+const PlanetHeaderSection: React.FC<Props> = (props: Props) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -24,7 +28,7 @@ const PlanetHeaderSection = () => {
         <Text
           variant={"caption"}
           color={"darkGray"}
-          value={"Click icon planet to see the detail of planet."}
+          value={"Click icon planet or name of planet to see the detail of planet."}
           style={styles.noteText}
         />
       </View>
@@ -34,6 +38,15 @@ const PlanetHeaderSection = () => {
           resizeMode={"stretch"}
           style={styles.heartIcon}
         />
+        {props.notifCount > 0 &&
+          <View style={styles.notificationContainer}>
+            <Text
+              variant={"notification"}
+              color={"white"}
+              value={`${props.notifCount}`}
+            />
+          </View>
+        }
       </TouchableOpacity>
     </View>
   );
@@ -62,6 +75,17 @@ const styles = StyleSheet.create({
     tintColor: colors.secondary,
     width: scaledVertical(40),
     height: scaledVertical(40),
+  },
+  notificationContainer: {
+    position: "absolute",
+    top: scaledVertical(-8),
+    right: scaledHorizontal(-8),
+    alignItems: "center",
+    justifyContent: "center",
+    width: scaledVertical(24),
+    height: scaledVertical(24),
+    borderRadius: 12,
+    backgroundColor: colors.pink
   }
 });
 

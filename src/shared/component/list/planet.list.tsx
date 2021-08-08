@@ -31,12 +31,14 @@ const PlanetList: React.FC<Props> = (props: Props) => {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
-          <Text
-            variant={"body-bold"}
-            color={"blue"}
-            value={props.name}
-            style={{ textDecorationLine: "underline", textTransform: "uppercase" }}
-          />
+          <TouchableOpacity onPress={() => { props.onPress?.() }}>
+            <Text
+              variant={"body-bold"}
+              color={"blue"}
+              value={props.name}
+              style={{ textDecorationLine: "underline", textTransform: "uppercase" }}
+            />
+          </TouchableOpacity>
           <Text
             variant={"caption"}
             value={`population for this planet is about ${props.population} people(s) and climate at ther is ${props.climate}`}

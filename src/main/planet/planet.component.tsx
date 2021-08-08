@@ -10,7 +10,7 @@ import PlanetList from "../../shared/component/list/planet.list";
 import Spacer from "../../shared/component/spacer/spacer";
 import Text from "../../shared/component/text/text";
 import PlanetHeaderSection from "./section/planet-header.section";
-import PlanetDetailSection from "./section/planet-detail.section";
+import PlanetDetailSection from "../../shared/component/section/planet-detail.section";
 import { observer } from "mobx-react";
 import { usePlanetStore } from "../root.provider";
 
@@ -20,7 +20,7 @@ const PlanetComponent = observer(() => {
 
   useEffect(() => {
     _planetStore.getListPlanets();
-
+    _planetStore.getSavedPlanets();
     return () => {
       _planetStore.resetPlanets();
     }
@@ -61,7 +61,9 @@ const PlanetComponent = observer(() => {
   return (
     <>
       <PageLayout style={styles.container}>
-        <PlanetHeaderSection />
+        <PlanetHeaderSection 
+          notifCount={!_planetStore.dataSavedPlanets ? 0 : _planetStore.dataSavedPlanets.length}
+        />
         <Spacer h={scaledVertical(32)} />
         {_planetStore.dataPlanets &&
           <FlatList

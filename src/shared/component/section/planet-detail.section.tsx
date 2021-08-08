@@ -1,31 +1,56 @@
-import React, { useState } from "react";
+import React from "react";
 import {
+  Alert,
   Image,
   ModalProps,
+  Platform,
   StyleSheet,
+  ToastAndroid,
   TouchableOpacity,
   View
 } from "react-native";
 import { scaledVertical } from "../../../service/helper/scale.helper";
-import ModalLayout from "../../../shared/component/layout/modal.layout";
-import Logo from "../../../shared/component/logo/logo";
-import Text from "../../../shared/component/text/text";
-import Spacer from "../../../shared/component/spacer/spacer";
-import RowList from "../../../shared/component/list/row.list";
+import ModalLayout from "../layout/modal.layout";
+import Logo from "../logo/logo";
+import Text from "../text/text";
+import Spacer from "../spacer/spacer";
+import RowList from "../list/row.list";
 import icons from "../../../asset/icons";
-import colors from "../../../shared/theme/colors";
+import colors from "../../theme/colors";
 import { Planet } from "../../../entity/planet.entity";
 import { formatDate } from "../../../service/helper/date.helper";
+import { usePlanetStore } from "../../../main/root.provider";
+import { addPlanet, deletePlanet } from "../../../database/planet.database";
 
 interface Props extends ModalProps {
   data: Planet;
   onClose: () => void;
-  isSaved?: boolean;
 }
 
 const PlanetDetailSection: React.FC<Props> = (props: Props) => {
+  const _planetStore = usePlanetStore();
+
   const onCloseModal = () => {
     props.onClose();
+  }
+
+  const onAction = async (planet) => {
+    const isContained = _planetStore.dataSavedPlanets.filter(e => e.url === props.data.url).length > 0;
+
+    if (isContained) {
+      await deletePlanet(planet.url);
+    } else {
+      await addPlanet(planet.url, planet.name, planet.population, planet.climate);
+    }
+
+    if (Platform.OS === "android") {
+      ToastAndroid.show(`Planet ${isContained ? "Remove" : "Added"} to Wishlist`, ToastAndroid.SHORT);
+    } else {
+      Alert.alert("Hei!", `Planet ${isContained ? "Remove" : "Added"} to Wishlist`);
+    }
+
+    _planetStore.getSavedPlanets();
+    onCloseModal();
   }
 
   return (
@@ -37,9 +62,15 @@ const PlanetDetailSection: React.FC<Props> = (props: Props) => {
       {props.data &&
         <View style={styles.container}>
           <TouchableOpacity
+            onPress={() => onAction(props.data)}
             style={styles.btnIconContainer}>
             <Image
-              source={props.isSaved ? icons.icon_trash : icons.icon_heart}
+              source={
+                _planetStore.dataSavedPlanets.filter(e => e.url === props.data.url).length > 0 ?
+                  icons.icon_trash
+                  :
+                  icons.icon_heart
+              }
               resizeMode={"stretch"}
               style={styles.icon}
             />

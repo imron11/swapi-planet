@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: scaledFontSize(20),
   },
+  notification: {
+    fontWeight: "bold",
+    fontSize: scaledFontSize(10)
+  }
 });
 
 type Variant =
@@ -36,7 +40,8 @@ type Variant =
   | "body"
   | "body-bold"
   | "caption"
-  | "caption-bold";
+  | "caption-bold"
+  | "notification";
 
 type Color =
   | "primary"
@@ -72,6 +77,8 @@ const Text: React.FC<Props> = ({
         return styles.caption;
       case "caption-bold":
         return styles.captionBold;
+      case "notification":
+        return styles.notification
       default:
         return styles.body
     }

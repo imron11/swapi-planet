@@ -1,8 +1,10 @@
 import { makeAutoObservable, toJS } from "mobx";
 import { container } from "tsyringe";
 import PlanetRestService from "../../service/rest/planet-rest.service";
-import { Planet } from "../../entity/planet.entity";
+import { Planet, SavedPlanet } from "../../entity/planet.entity";
 import RootStore from "../root.store";
+import { getAllSavedPlanets } from "../../database/planet.database";
+import Realm from "realm";
 
 class PlanetStore {
   root: RootStore;
@@ -15,6 +17,8 @@ class PlanetStore {
 
   dataPlanets: Planet[] = null;
   dataDetailPlanet: Planet = null;
+
+  dataSavedPlanets: Realm.Results<SavedPlanet> = null;
 
   //for infinite scroll
   isLoadData: boolean = false;
@@ -30,14 +34,19 @@ class PlanetStore {
     this.dataPlanets = null;
     this.isLoadData = true;
     this._planetRestService.getListPlanets(this.pageNumber)
-    .finally(() => {
-      this.isLoadData = false;
-    })
-    .subscribe(
-      (response) => {
-        this.setDataPlanets(response.results)
-      }
-    );
+      .finally(() => {
+        this.setIsLoadData();
+      })
+      .subscribe(
+        (response) => {
+          this.setDataPlanets(response.results)
+        }
+      );
+  }
+
+  getSavedPlanets = async () => {
+    const savedPlanets = await getAllSavedPlanets();
+    this.setSavedPlanets(savedPlanets);
   }
 
   getMorePlanets = () => {
@@ -45,17 +54,17 @@ class PlanetStore {
     if (this.pageNumber <= 6) {
       this.isLoadData = true;
       this._planetRestService.getListPlanets(this.pageNumber)
-      .finally(() => {
-        this.isLoadData = false;
-      })
-      .subscribe(
-        (response) => {
-          const currentPlanets = toJS(this.dataPlanets);
-          const allPlanets = currentPlanets.concat(response.results);
+        .finally(() => {
+          this.setIsLoadData();
+        })
+        .subscribe(
+          (response) => {
+            const currentPlanets = toJS(this.dataPlanets);
+            const allPlanets = currentPlanets.concat(response.results);
 
-          this.setDataPlanets(allPlanets);
-        }
-      );
+            this.setDataPlanets(allPlanets);
+          }
+        );
     }
   }
 
@@ -73,6 +82,14 @@ class PlanetStore {
 
   setDetailPlanet = (planet) => {
     this.dataDetailPlanet = planet;
+  }
+
+  setSavedPlanets = (savedPlanets) => {
+    this.dataSavedPlanets = savedPlanets;
+  }
+
+  setIsLoadData = () => {
+    this.isLoadData = false;
   }
 }
 
